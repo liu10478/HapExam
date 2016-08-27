@@ -1,0 +1,200 @@
+<#-- * description: sales * version: 1.0 * #copyright# * --> <#include
+"../include/head.html">
+<body style="padding: 10px;">
+	<form id="salesForm"></form>
+	<div id="salesGrid" style="margin: 0; padding: 0"></div>
+	<script type="text/javascript">
+     $(function () {
+        window['salesForm'] = $("#salesForm").ligerForm({
+        	unSetValidateAttr: false,
+            fields : [{
+	            	display:'company',
+	                width:120,
+           		 	type : 'popup',
+	                newline : false,
+	                name:'companyId',
+	                textField:'orgCompany.companyName',
+	                options : {             
+	                    valueField : 'companyId',//alueField
+	                    textField : 'companyName',//textField 
+	                    grid : {
+	                        columns : [{
+	                            display : 'companyNumber',
+	                            name : "companyNumber",
+	                            width : 120,
+	                            type : "int"
+	                        }, {
+   	                            display : 'companyName',
+	                            name : "companyName",
+	                            width:120,
+	                            type : "text"
+	                        }],
+	                        url : '${base.contextPath}/company/query'
+	                    }
+	                }
+            },{
+            	display:'customer',
+                width:120,
+       		 	type : 'popup',
+                newline : false,
+                name:'arCustomers.customerNumber',
+                textField:'arCustomers.customerName',
+                options : {             
+                    valueField : 'companyNumber',//alueField
+                    textField : 'customerName',//textField 
+                    grid : {
+                        columns : [{
+                            display : 'companyNumber',
+                            name : "companyNumber",
+                            width : 120,
+                            type : "int"
+                        }, {
+	                            display : 'customerName',
+                            name : "customerName",
+                            width:120,
+                            type : "text"
+                        }],
+                        url : '${base.contextPath}/customer/query'
+                    }
+                }
+        },{
+            display : 'saleordernumber',
+            name : 'orderNumber',
+            align : 'left',
+            width : 120,
+            editor : {
+                type : 'text'
+            },
+            validate: {
+                required: false
+            }
+        },{
+        	display:'item',
+            width:120,
+   		 	type : 'popup',
+            newline : false,
+            name:'invInventoryItems.itemCode',
+            textField:'arCustomers.itemDescription',
+            options : {             
+                valueField : 'itemCode',//alueField
+                textField : 'itemDescription',//textField 
+                grid : {
+                    columns : [{
+                        display : 'itemCode',
+                        name : "itemCode",
+                        width : 120,
+                        type : "int"
+                    }, {
+                        display : 'itemDescription',
+                        name : "itemDescription",
+                        width:120,
+                        type : "text"
+                    }],
+                    url : '${base.contextPath}/item/query'
+                }
+            }
+    },{
+    	type : 'combobox',			//下拉状态
+        label : 'orderStatus',
+        name : 'orderStatus',
+        options : {
+            valueField : 'ID',
+            textField : 'text',
+            data : [ {
+                ID : 'NEW',
+                text : '新建'
+            }, {
+                ID : 'SUBMITED',
+                text : '已提交'
+            }, {
+                ID : 'APPROVED',
+                text : '已审批'
+            }, {
+                ID : 'REJECTED',
+                text : '已拒绝'
+            }
+            
+            ]
+        },
+        newline : false
+   }],
+    buttons : [{
+        text : '<@spring.message "hap.query"/>',
+        disabled : false,
+        width : 60,
+        click : function() {
+            Hap.gridQuery({
+                form : salesForm,
+                grid : salesGrid
+            })
+        }
+    },{
+    	text : '<@spring.message "hap.reset"/>',
+        disabled : false,
+        width : 60,
+        click : function() {
+        	salesForm.reset();
+        }
+
+    }]
+        }); 
+
+        window['salesGrid'] = $("#salesGrid").ligerGrid({
+            unSetValidateAttr: false,
+            columns          : [{
+                display: 'OrderNumber',
+                name   : 'headerId',
+                align  : 'left',
+                width  : 120,
+                render: function(rowdata){
+                	return'<a href="${base.contextPath}/order/topage?id='+rowdata.headerId+'">'+rowdata.headerId+'</a>'
+                }
+            },{
+                display: 'Company',
+                name   : 'orgCompany.companyName',
+                align  : 'left',
+                width  : 120
+            },{
+                display: 'Customer',
+                name   : 'arCustomers.customerName',
+                align  : 'left',
+                width  : 120
+            },{
+                display: 'OrderDate',
+                name   : 'orderDate',
+                align  : 'left',
+                width  : 120
+            },{
+                display: 'OrderStatu',
+                name   : 'orderStatus',
+                align  : 'left',
+                width  : 120
+            },{
+                display: 'OrderPrice',
+                name   : 'orderMoney',
+                align  : 'left',
+                width  : 120
+            }],
+            url: '${base.contextPath}/sale/showallorder',
+            toolbar : {
+                items : [ {
+                    text : '<@spring.message "hap.new"/>',
+                    disable : false,
+                    click : function() {
+                    	window.location.href="${base.contextPath}/order/topage?id="+null; 
+                    },
+                    icon : 'add'
+                }, {
+                    line : true
+                }]
+            },
+
+            enabledEdit      : true,
+            width            : '99%',
+            height           : '98%',
+            checkbox         : true
+        });
+    });
+</script>
+</body>
+</html>

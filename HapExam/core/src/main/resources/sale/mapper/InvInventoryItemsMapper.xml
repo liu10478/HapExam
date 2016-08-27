@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- ~ #{copyright}# -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hbi.core.sale.mapper.InvInventoryItemsMapper">
+	
+	<resultMap type="hbi.core.sale.dto.InvInventoryItems" id="invInventoryItems">
+		<result column="item_code" property="itemCode" jdbcType="DECIMAL" />
+		<result column="inventory_item_id" property="inventoryItemId" jdbcType="DECIMAL" />
+		<result column="item_description" property="itemDescription" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!--物料LOV查询 -->
+	<select id="queryAllItems" resultMap="invInventoryItems">
+		select i.inventory_item_id,i.item_code,i.item_description
+		from
+		HAP_INV_INVENTORY_ITEMS i
+	</select>
+	
+
+</mapper>
